@@ -1,0 +1,128 @@
+<!-- Copyright (c) 2023 Cisco and/or its affiliates.
+This software is licensed to you under the terms of the Cisco Sample
+Code License, Version 1.1 (the "License"). You may obtain a copy of the
+License at
+           https://developer.cisco.com/docs/licenses
+All use of the material herein must be in accordance with the terms of
+the License. All rights not expressly granted by the License are
+reserved. Unless required by applicable law or agreed to separately in
+writing, software distributed under the License is distributed on an "AS
+IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+or implied. -->
+
+{% extends "master_page.html" %}
+
+{% block content %}
+<div class="row">
+
+        <div class="col-xl-3 col-md-3">
+        </div>
+
+        <div class="col-xl-6 col-md-6">
+            <div class="section" >
+                <div class="panel panel--loose panel--raised base-margin-bottom">
+                    <form action="/" method="POST" enctype="multipart/form-data"> 
+                        <div class="section"> 
+                            
+                            <!-- Customer Logo -->
+                            <div class="flex flex-center half-margin-bottom">
+                                <img id="customer-logo" src="{{ url_for('static', filename='images/logo_long_green.png')}}">
+                            </div>
+
+                            <div class="form-group base-margin-bottom">
+                                <div class="form-group__text">
+                                    <input id="input-receipient" name="input-receipient" type="email" required value="{{settings.input_receipient}}" placeholder="user@cisco.com">
+                                    <label for="input-receipient">Receipient*
+                                        <span tabindex="0" class="" data-balloon="The email address of the Webex user that will receive the notifications." data-balloon-pos="up">
+                                            <span class="icon-help-alt icon-size-14"></span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <p class="text-weight-900">Crowd Detection</p>
+                            <div class="form-group base-margin-bottom">
+                                <div class="form-group__text">
+                                    <input id="input-person-count" name="input-person-count" type="text" required value="{{settings.input_person_count}}" placeholder="1">
+                                    <label for="input-person-count">Person Count Threshold*
+                                        <span tabindex="0" class="" data-balloon="The number of people that can be seen in a particular zone on a camera that will be tracked to determine a crowd event." data-balloon-pos="up">
+                                            <span class="icon-help-alt icon-size-14"></span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group base-margin-bottom">
+                                <div class="form-group__text">
+                                    <input id="input-crowd-dwell-time" name="input-crowd-dwell-time" type="text" required value="{{settings.input_crowd_dwell_time}}" placeholder="60">
+                                    <label for="iinput-crowd-dwell-time">Person Dwell Time*
+                                        <span tabindex="0" class="" data-balloon="The number of seconds that need to transcur with at least 'person count threshold' people detected to trigger a crowd alert." data-balloon-pos="up">
+                                            <span class="icon-help-alt icon-size-14"></span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <p class="text-weight-900">Noise Detection</p>
+                            <div class="form-group base-margin-bottom">
+                                <div class="form-group__text">
+                                    <input id="input-noise-threshold" name="input-noise-threshold" type="text"  value="{{settings.input_noise_threshold}}" placeholder="-60">
+                                    <label for="input-noise-threshold">Noise Threshold
+                                        <span tabindex="0" class="" data-balloon="A negative decibel value to determine a noise event. A lower value indicates more noise." data-balloon-pos="up">
+                                            <span class="icon-help-alt icon-size-14"></span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group base-margin-bottom">
+                                <div class="form-group__text">
+                                    <input id="input-noise-dwell-time" name="input-noise-dwell-time" type="text" required value="{{settings.input_noise_dwell_time}}" placeholder="60">
+                                    <label for="input-noise-dwell-time">Noise Dwell Time*
+                                        <span tabindex="0" class="" data-balloon="The number of seconds that need to transcur with a noise level louder than the threshold to trigger a noise alert." data-balloon-pos="up">
+                                            <span class="icon-help-alt icon-size-14"></span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                             
+                        <input id="submit_button" class="btn btn-primary" type="submit" value="1. Set Detection Values">
+                        <span class="required-label pull-right">* required fields</span>
+
+                        </div> 
+
+                    </form>
+
+                    <input id="start_mvsense" class="btn btn-primary" value="2. Start Detection">
+                    <input id="stop_mvsense" class="btn btn-primary" style="display:none; margin:0;" value="2. Stop  Detection">
+                    
+
+                </div>
+            </div>
+        </div>
+
+    <div class="col-xl-3 col-md-3">
+    </div>
+</div>
+<script type="text/javascript">
+
+    $(function() {
+      $('input#start_mvsense').bind('click', function() {
+        $('input#start_mvsense').hide();
+        $('input#stop_mvsense').show();
+        $.getJSON('/start_mvsense',function(data) {});
+        return false;
+      });
+    });
+
+
+
+$(function() {
+    $('input#stop_mvsense').bind('click', function() {
+    $('input#start_mvsense').show();
+    $('input#stop_mvsense').hide();
+    $.getJSON('/stop_mvsense',
+        function(data) {});
+    return false;
+    });
+});
+</script>
+{% endblock %}
